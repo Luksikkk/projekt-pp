@@ -1,6 +1,7 @@
-#include <stdio.h>
+#include "include/menu/menu.h"
 
 int main(void) {
-    printf("Hello, World!\n");
-    return 0;
+    Menu *menu = stworz_menu();
+    wypisz_menu(menu);
+    usun_menu(&menu);
 }

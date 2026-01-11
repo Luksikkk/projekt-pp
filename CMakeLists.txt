@@ -6,4 +6,8 @@ set(CMAKE_C_STANDARD 11)
 add_executable(Projekt_C main.c
         include/menu/menu.h
         src/menu/menu.c
+        src/posty/lista_postow.c
+        include/posty/lista_postow.h
+        src/posty/post.c
+        include/posty/post.h
 )

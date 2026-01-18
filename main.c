@@ -27,12 +27,16 @@ int main(void) {
                 usun_post_z_listy(lista, id_posta);
                 break;
             case 4:
-                //zapisz_do_pliku(lista);
-                printf("Funkcjonalnosc w trakcie implementacji.\n");
+                char nazwa[100];
+                printf("Podaj nazwe pliku:\n");
+                scanf("%s", nazwa);
+                zapisz_do_pliku(lista, nazwa);
                 break;
             case 5:
-                //wczytaj_z_pliku(lista);
-                printf("Funkcjonalnosc w trakcie implementacji.\n");
+                char sciezka[100];
+                printf("Podaj sciezke pliku\n");
+                scanf("%s", sciezka);
+                wczytaj_z_pliku(lista,sciezka);
                 break;
             default:
                 printf("Koniec programu.\n");

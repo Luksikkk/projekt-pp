@@ -8,8 +8,8 @@ void dodaj_post(ListaPostow* lista);
 void usun_liste(ListaPostow** p_post);
 void wypisz_posty(const ListaPostow* post);
 int usun_post_z_listy(ListaPostow *lista,int id);
-int zapisz_do_pliku(ListaPostow *lista);
-int wczytaj_z_pliku(ListaPostow *lista);
+int zapisz_do_pliku(ListaPostow *lista, char* sciezka);
+void wczytaj_z_pliku(ListaPostow *lista, char* sciezka);
 
 
 #endif //MAIN_C_LISTY_POSTOW_H

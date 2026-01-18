@@ -2,13 +2,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
-enum status {
-    DO_WERYFIKACJI,
-    W_TRAKCIE_ANALIZY,
-    ZATWIERDZONE,
-    USUNIETE
-};
 
 struct Post {
     int id;
@@ -58,10 +53,6 @@ enum status getstatuszgloszenie(Post* post) {
 enum kategoria getkategoria_zgloszenia(Post* post) {
     return post -> kategoria_zgloszenia;
 }
-
-
-
-
 
 Post* stworz_post(int id) {
     int wybor;
@@ -126,4 +117,61 @@ void wyswietl_post(Post* post) {
 void usun_post(Post** p_post) {
     free (*p_post);
     *p_post = NULL;
+}
+
+void setid(Post* post, int id) {
+    post-> id = id;
+}
+
+void setautor(Post* post, char* autor) {
+    strcpy(post -> autor, autor);
+}
+void settresc(Post* post, char* tresc) {
+    strcpy(post -> tresc, tresc);
+}
+void setkategoria(Post* post, enum kategoria kat) {
+    post -> kategoria_zgloszenia = kat;
+}
+void setliczbazgloszen(Post* post, int liczbazgloszen) {
+    post -> liczba_zgloszen = liczbazgloszen;
+}
+void setstatuszgloszenia(Post* post, enum status statuszgloszenia) {
+    post -> status_zgloszenia = statuszgloszenia;
+}
+enum status stringtostatus(char* stat) {
+    if (stat == "DO_WERYFIKACJI") {
+        return DO_WERYFIKACJI;
+    }
+    if (stat == "W_TRAKCIE_ANALIZY") {
+        return W_TRAKCIE_ANALIZY;
+    }
+    if (stat == "ZATWIERDZONE") {
+        return ZATWIERDZONE;
+    }
+    if (stat == "USUNIETE") {
+        return USUNIETE;
+    }
+    return -1;
+}
+
+enum kategoria stringtokategoria(char* tekst) {
+    if (tekst == "SPAM") {
+        return SPAM;
+    }
+    if (tekst == "HEJT") {
+        return HEJT;
+    }
+    if (tekst == "WULGARYZMY") {
+        return WULGARYZMY;
+    }
+    if (tekst == "FEJK_NEWS") {
+        return FEJK_NEWS;
+    }
+    if (tekst == "NIEODPOWIEDNIE") {
+        return NIEODPOWIEDNIE;
+    }
+    if (tekst == "BRAK") {
+        return BRAK;
+    }
+    return -1;
 }

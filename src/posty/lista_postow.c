@@ -1,4 +1,6 @@
 #include "../../include/posty/lista_postow.h"
+
+#include <stdio.h>
 #include <stdlib.h>
 #include "../../include/posty/post.h"
 
@@ -65,5 +67,53 @@ int usun_post_z_listy(ListaPostow *lista,int id) {
          }
      }
     return 0;
+}
+
+int zapisz_do_pliku(ListaPostow *lista, char* sciezka) {
+    FILE *plik = fopen(sciezka,"w");
+    if (plik == NULL) {
+        return -1;
+    }
+    for (int i=0; i<lista->rozmiar;i++) {
+        fprintf(plik,"%d\n", getid(lista->posty[i]));
+        fprintf(plik,"%s\n", getautor(lista->posty[i]));
+        fprintf(plik,"%s\n", gettresc(lista->posty[i]));
+        fprintf(plik,"%s\n", kategoria_to_string(getkategoria_zgloszenia(lista->posty[i])));
+        fprintf(plik, "%d\n", getliczba_zgloszen(lista->posty[i]));
+        fprintf(plik, "%s\n", statuszgloszenie_to_string(getstatuszgloszenie(lista->posty[i])));
+    }
+    fclose(plik);
+    return 1;
+}
+
+
+void wczytaj_z_pliku(ListaPostow *lista, char* sciezka) {
+    FILE* plik = fopen(sciezka, "r");
+    if (plik == NULL) {
+        printf("Nie udalo sie wczytac pliku.\n");
+        return;
+    }
+    int id;
+    while (plik == EOF) {
+        dodaj_post(lista);
+        fscanf(plik,"%d",&id);
+        setid(lista->posty[lista->rozmiar-1],id);
+        char autor[100];
+        fscanf(plik,"%s", autor);
+        setautor(lista->posty[lista->rozmiar-1],autor);
+        char tresc[280];
+        fscanf(plik,"%s",tresc);
+        settresc(lista->posty[lista->rozmiar-1],tresc);
+        char kategoria[50];
+        fscanf(plik,"%s",kategoria);
+        setkategoria(lista->posty[lista->rozmiar-1],stringtostatus(kategoria));
+        int liczbazgloszen;
+        fscanf(plik, "%d", &liczbazgloszen);
+        setliczbazgloszen(lista->posty[lista->rozmiar-1], liczbazgloszen);
+        char statuszgloszenia[50];
+        fscanf(plik,"%s", statuszgloszenia);
+        setstatuszgloszenia(lista->posty[lista->rozmiar-1], stringtostatus(statuszgloszenia));
+    }
+    fclose(plik);
 }
 

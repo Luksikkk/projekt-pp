@@ -2,24 +2,29 @@
 
 #include "include/menu/menu.h"
 #include "include/posty/lista_postow.h"
-#include "include/posty/post.h"
 
 
-int main(void) {
+int main(int argc, char* argv[]) {
     Menu *menu = stworz_menu();
     ListaPostow *lista = stworz_liste();
-    while (1) {
-        int wybor;
-        int id_posta;
+    int petla = 1;
+    int wybor;
+    int id_posta;
+    while (petla == 1) {
+        printf("======== Moderacyjna Baza Postow Social-Media ========\n");
         wypisz_menu(menu);
         printf("Wybierz opcje: \n");
-        scanf("%d",&wybor);
+        if (scanf("%d",&wybor) != 1) {
+            while (getchar() != '\n');
+            printf("Niepoprawny wybor. Sprobuj jeszcze raz.\n\n");
+            continue;
+        }
         switch (wybor) {
             case 1:
                 wypisz_posty(lista);
                 break;
             case 2:
-                dodaj_post(lista);
+                dodaj_post(lista,1);
                 break;
             case 3:
                 printf("Podaj ID posta:\n");
@@ -38,13 +43,15 @@ int main(void) {
                 scanf("%s", sciezka);
                 wczytaj_z_pliku(lista,sciezka);
                 break;
+            case 0:
+                printf("Koncze dzialanie programu...\n");
+                petla = 0;
+                break;
             default:
-                printf("Koniec programu.\n");
-                return 0;
+                printf("Nieprawidlowy wybor! Sprobuj jeszcze raz.\n\n");
+                break;
         }
-
     }
     usun_menu(&menu);
     usun_liste(&lista);
-
 }

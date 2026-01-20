@@ -1,8 +1,10 @@
 #include "../../include/posty/lista_postow.h"
+#include "../../include/posty/post.h"
+
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "../../include/posty/post.h"
+#include <string.h>
 
 
 struct ListaPostow {
@@ -18,7 +20,7 @@ ListaPostow* stworz_liste(void) {
     return lista;
 }
 
-void dodaj_post(ListaPostow* lista) {
+int dodaj_post(ListaPostow* lista, int pytaj) {
     int id = 1;
     for (int i=0; i<lista->rozmiar;i++) {
         if (getid(lista->posty[i]) != id) {
@@ -27,13 +29,20 @@ void dodaj_post(ListaPostow* lista) {
         id++;
     }
     Post* nowy_post = stworz_post(id);
-    lista -> rozmiar++;
-    lista -> posty = realloc(lista -> posty, lista -> rozmiar * sizeof(*(lista -> posty)));
-    if (lista -> posty == NULL) {
-        lista -> rozmiar--;
-        return;
+    if (pytaj) {
+        utworz_post(nowy_post);
     }
-    lista -> posty[lista -> rozmiar - 1] = nowy_post;
+    if (nowy_post) {
+        lista -> rozmiar++;
+        lista -> posty = realloc(lista -> posty, lista -> rozmiar * sizeof(*(lista -> posty)));
+        if (lista -> posty == NULL) {
+            lista -> rozmiar--;
+        }
+        lista -> posty[lista -> rozmiar - 1] = nowy_post;
+
+        return 1;
+    }
+    return 0;
 }
 
 void usun_liste(ListaPostow** p_post) {
@@ -46,8 +55,13 @@ void usun_liste(ListaPostow** p_post) {
 }
 
 void wypisz_posty(const ListaPostow* lista) {
-    for (int i=0; i<lista -> rozmiar; i++) {
-        wyswietl_post(lista -> posty[i]);
+    if (lista->rozmiar == 0) {
+        printf("Brak postow w bazie.\n\n\n");
+    }
+    else {
+        for (int i=0; i<lista -> rozmiar; i++) {
+            wyswietl_post(lista -> posty[i]);
+        }
     }
 }
 
@@ -55,10 +69,13 @@ int usun_post_z_listy(ListaPostow *lista,int id) {
      for (int i=0; i<lista->rozmiar; i++) {
          if (getid(lista->posty[i]) == id) {
              usun_post(&lista->posty[i]);
+
              for (int j=i+1; j<lista->rozmiar; j++) {
                  lista->posty[j-1] = lista->posty[j];
              }
+
              lista->rozmiar--;
+
              lista->posty = realloc(lista->posty,lista->rozmiar);
              if (lista->posty == NULL) {
                  return -1;
@@ -69,9 +86,10 @@ int usun_post_z_listy(ListaPostow *lista,int id) {
     return 0;
 }
 
-int zapisz_do_pliku(ListaPostow *lista, char* sciezka) {
+int zapisz_do_pliku(ListaPostow *lista, const char* sciezka) {
     FILE *plik = fopen(sciezka,"w");
     if (plik == NULL) {
+        printf("Nie udalo sie zapisac postow do pliku.\n");
         return -1;
     }
     for (int i=0; i<lista->rozmiar;i++) {
@@ -87,33 +105,41 @@ int zapisz_do_pliku(ListaPostow *lista, char* sciezka) {
 }
 
 
-void wczytaj_z_pliku(ListaPostow *lista, char* sciezka) {
+void wczytaj_z_pliku(ListaPostow *lista, const char* sciezka) {
     FILE* plik = fopen(sciezka, "r");
     if (plik == NULL) {
         printf("Nie udalo sie wczytac pliku.\n");
         return;
     }
-    int id;
-    while (plik == EOF) {
-        dodaj_post(lista);
-        fscanf(plik,"%d",&id);
+    int id, liczbazgloszen, c;
+    char autor[maxauthor], tresc[maxtresc], kategoria[maxkategoria], statuszgloszenia[maxkategoria];
+    while (fscanf(plik,"%d",&id) == 1) {
+        while ((c = fgetc(plik)) != '\n' && c != EOF);
+        dodaj_post(lista,0);
         setid(lista->posty[lista->rozmiar-1],id);
-        char autor[100];
-        fscanf(plik,"%s", autor);
+
+        fgets(autor,maxauthor, plik);
+        autor[strcspn(autor, "\n")] = 0;
         setautor(lista->posty[lista->rozmiar-1],autor);
-        char tresc[280];
-        fscanf(plik,"%s",tresc);
+
+        fgets(tresc,maxtresc,plik);
+        tresc[strcspn(tresc, "\n")] = 0;
         settresc(lista->posty[lista->rozmiar-1],tresc);
-        char kategoria[50];
-        fscanf(plik,"%s",kategoria);
-        setkategoria(lista->posty[lista->rozmiar-1],stringtostatus(kategoria));
-        int liczbazgloszen;
+
+        fgets(kategoria,maxkategoria,plik);
+        kategoria[strcspn(kategoria, "\n")] = 0;
+        setkategoria(lista->posty[lista->rozmiar-1],stringtokategoria(kategoria));
+
         fscanf(plik, "%d", &liczbazgloszen);
         setliczbazgloszen(lista->posty[lista->rozmiar-1], liczbazgloszen);
-        char statuszgloszenia[50];
-        fscanf(plik,"%s", statuszgloszenia);
+
+        while ((c = fgetc(plik)) != '\n' && c != EOF);
+
+        fgets(statuszgloszenia,maxkategoria, plik);
+        statuszgloszenia[strcspn(statuszgloszenia, "\n")] = 0;
         setstatuszgloszenia(lista->posty[lista->rozmiar-1], stringtostatus(statuszgloszenia));
     }
     fclose(plik);
+    printf("Poprawnie wczytano plik.\n\n");
 }
 

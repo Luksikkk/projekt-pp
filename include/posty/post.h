@@ -1,14 +1,18 @@
 #ifndef MAIN_C_POST_H
 #define MAIN_C_POST_H
 
-enum status {
+#define maxtresc 280
+#define maxauthor 100
+#define maxkategoria 50
+
+enum Status {
     DO_WERYFIKACJI,
     W_TRAKCIE_ANALIZY,
     ZATWIERDZONE,
-    USUNIETE
+    USUNIETE,
 };
 
-enum kategoria {
+enum Kategoria {
     SPAM,
     HEJT,
     WULGARYZMY,
@@ -19,25 +23,31 @@ enum kategoria {
 
 typedef struct Post Post;
 
-int getid(Post* post);
+int getid(const Post* post);
 Post* stworz_post(int id);
 void usun_post(Post** p_post);
-const char *kategoria_to_string(enum kategoria kat);
+const char *kategoria_to_string(enum Kategoria kat);
 void wyswietl_post(Post* post);
-enum status getstatuszgloszenie(Post* post);
-enum kategoria getkategoria_zgloszenia(Post* post);
-char *statuszgloszenie_to_string(enum status Status);
-int getliczba_zgloszen(Post* post);
-char* getautor(Post* post);
-char* gettresc(Post* post);
+enum Status getstatuszgloszenie(const Post* post);
+enum Kategoria getkategoria_zgloszenia(const Post* post);
+char *statuszgloszenie_to_string(enum Status Status);
+int getliczba_zgloszen(const Post* post);
+const char* getautor(const Post* post);
+const char* gettresc(const Post* post);
 void setid(Post* post, int id);
-void setautor(Post* post, char* autor);
-void settresc(Post* post, char* tresc);
-void setkategoria(Post* post, enum kategoria kat);
+void setautor(Post* post, const char* autor);
+void settresc(Post* post, const char* tresc);
+void setkategoria(Post* post, enum Kategoria kat);
 void setliczbazgloszen(Post* post, int liczbazgloszen);
-void setstatuszgloszenia(Post* post, enum status statuszgloszenia);
-enum status stringtostatus(char* stat);
-enum kategoria stringtokategoria(char* tekst);
+void setstatuszgloszenia(Post* post, enum Status statuszgloszenia);
+enum Status stringtostatus(const char* stat);
+void utworz_post(Post *post);
+enum Kategoria stringtokategoria(const char* tekst);
+void podaj_autor(char* autor);
+void podaj_tresc(char* tresc);
+void podaj_liczbezgloszen(int* liczba);
+void podaj_kategoriezgloszenia(enum Kategoria *kategoria);
+
 
 
 

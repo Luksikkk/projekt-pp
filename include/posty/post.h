@@ -5,13 +5,15 @@
 #define maxauthor 100
 #define maxkategoria 50
 
+static const int liczba_statusow = 4;
 enum Status {
-    DO_WERYFIKACJI,
     W_TRAKCIE_ANALIZY,
+    DO_WERYFIKACJI,
     ZATWIERDZONE,
     USUNIETE,
 };
 
+static const int liczba_kategorii = 6;
 enum Kategoria {
     SPAM,
     HEJT,

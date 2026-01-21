@@ -173,14 +173,14 @@ void setstatuszgloszenia(Post* post, const enum Status statuszgloszenia) {
 void podaj_autor(char* autor) {
     int c;
     int poprawny = 0;
-    while ((c = getchar()) != '\n' && c != EOF);
+    while ((c = getchar()) != '\n' && c != EOF) {}
     while (poprawny == 0) {
         printf("Podaj nazwe autora:\n");
         if (fgets(autor,maxauthor,stdin) == NULL) break;
         size_t dlugosc = strlen(autor);
         if (dlugosc == maxauthor - 1 && autor[dlugosc-1] != '\n') {
             printf("Nazwa jest za dluga! Sprobuj jeszcze raz\n");
-            while ((c = getchar()) != '\n' && c != EOF);
+            while ((c = getchar()) != '\n' && c != EOF) {}
             continue;
         }
         if (dlugosc > 0 && autor[dlugosc-1] == '\n') {
@@ -199,7 +199,7 @@ void podaj_autor(char* autor) {
             }
         }
         if (znak) continue;
-        break;
+        poprawny=1;
     }
 
 }
@@ -213,7 +213,7 @@ void podaj_tresc(char* tresc) {
         size_t dlugosc = strlen(tresc);
         if (dlugosc == maxtresc - 1 && tresc[dlugosc-1] != '\n') {
             printf("Tresc jest za dluga! Sprobuj jeszcze raz\n");
-            while ((c = getchar()) != '\n' && c != EOF);
+            while ((c = getchar()) != '\n' && c != EOF) {}
             continue;
         }
         if (dlugosc > 0 && tresc[dlugosc-1] == '\n') {
@@ -224,7 +224,7 @@ void podaj_tresc(char* tresc) {
             printf("Tresc nie moze byc pusta! Sprobuj jeszcze raz\n");
             continue;
         }
-        break;
+        poprawny=1;
     }
 }
 
@@ -237,7 +237,7 @@ void podaj_kategoriezgloszenia(enum Kategoria *kategoria) {
         printf("0. SPAM\n1. HEJT\n2. Wulgaryzmy \n3. Fejk news \n4. Nieodpowiednie tresci\n");
         if (scanf("%d", &wybor) != 1) {
             printf("Niepoprawny wybor. Sprobuj jeszcze raz.\n");
-            while ((c = getchar()) != '\n' && c != EOF);
+            while ((c = getchar()) != '\n' && c != EOF) {}
             continue;
         }
         switch (wybor) {
@@ -270,7 +270,7 @@ void podaj_liczbezgloszen(int* liczba) {
         printf("Podaj liczbe zgloszen: \n");
         if (scanf("%d", &wartosc) != 1) {
             printf("Niepoprawna wartosc! Sprobuj jeszcze raz.\n");
-            while ((c = getchar()) != '\n' && c != EOF);
+            while ((c = getchar()) != '\n' && c != EOF) {}
             continue;
         }
         if (wartosc<0) {
